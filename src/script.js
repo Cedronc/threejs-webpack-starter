@@ -14,6 +14,7 @@ const scene = new THREE.Scene()
 
 // Objects
 const geometry = new THREE.TorusGeometry( .7, .2, 16, 100 );
+const TetrahedronGeometry = new THREE.TetrahedronGeometry(.7, 0)
 
 // Materials
 
@@ -22,15 +23,23 @@ material.color = new THREE.Color(0xff0000)
 
 // Mesh
 const sphere = new THREE.Mesh(geometry,material)
-scene.add(sphere)
+//scene.add(sphere)
+
+const triangle = new THREE.Mesh(TetrahedronGeometry, material)
+scene.add(triangle)
 
 // Lights
 
-const pointLight = new THREE.PointLight(0xffffff, 0.1)
+const pointLight = new THREE.pointLight(0xffffff, 0.1, 100)
 pointLight.position.x = 2
 pointLight.position.y = 3
 pointLight.position.z = 4
+
+const pointLightHelper = new THREE.pointLightHelper(pointLight, 1)
+
 scene.add(pointLight)
+
+
 
 /**
  * Sizes
@@ -62,7 +71,12 @@ window.addEventListener('resize', () =>
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
 camera.position.x = 0
 camera.position.y = 0
-camera.position.z = 2
+camera.position.z = 3
+
+const cameraGUI = gui.addFolder('camera')
+cameraGUI.add(camera.position, 'x').min(-10).max(10)
+cameraGUI.add(camera.position, 'y').min(-10).max(10)
+cameraGUI.add(camera.position, 'z').min(-10).max(10)
 scene.add(camera)
 
 // Controls
@@ -90,7 +104,9 @@ const tick = () =>
     const elapsedTime = clock.getElapsedTime()
 
     // Update objects
-    sphere.rotation.y = .5 * elapsedTime
+    //sphere.rotation.y = .5 * elapsedTime
+
+    triangle.rotation.y = .5 * elapsedTime
 
     // Update Orbital Controls
     // controls.update()
